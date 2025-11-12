@@ -1,11 +1,19 @@
+<div align="center">
+
 # PAPERMASK's USEFUL ATTRIBUTES
 
-A lightweight collection of custom **editor attributes and drawers** to improve your Unity Inspector experience.
+<img width="200" alt="pprmsk-ezgif com-resize" src="https://github.com/user-attachments/assets/031b58d3-b3c0-4315-821d-6a359f68a592" />
+
+A lightweight collection of custom **editor attributes and drawers** to improve your Unity Inspector experience. <br>
 Each script adds either visual polish, validation, or convenient functionality to serialized fields, without any heavy dependencies.
+
+GIT LINK: **`https://github.com/pprmsk/papermasks-unity-utilities.git?path=UsefulAttributes`**
+
+</div>
 
 ---
 
-## Features Overview
+## Feature Overview
 
 ### **Attributes**
 
