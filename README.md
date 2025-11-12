@@ -7,8 +7,9 @@ Welcome! On this page, you'll find my Unity3D utility packages. To use them in y
 ## **Auto Scene Switcher Git Link**
 A custom window to switch scenes more easily. Uses path Assets/Scenes to automatically generate buttons and tabs for all scenes in your project.
 
-**`https://github.com/pprmsk/papermasks-unity-utilities.git?path=AutoSceneSwitcher`**
+GIT LINK: **`https://github.com/pprmsk/papermasks-unity-utilities.git?path=AutoSceneSwitcher`**
 
 ## **Useful Attributes Git Link**
 A collection of useful attributes to clean up your inspector and code more defensive.
-**`https://github.com/pprmsk/papermasks-unity-utilities.git?path=UsefulAttributes`**
+
+GIT LINK: **`https://github.com/pprmsk/papermasks-unity-utilities.git?path=UsefulAttributes`**
