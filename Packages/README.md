@@ -4,7 +4,7 @@
 
 <img width="200" alt="pprmsk-ezgif com-resize" src="https://github.com/user-attachments/assets/031b58d3-b3c0-4315-821d-6a359f68a592" />
 
-[![Stargazers](https://img.shields.io/github/stars/pprmsk/papermasks-unity-utility-packages.svg?style=for-the-badge&color=yellow)](https://github.com/pprmsk/papermasks-unity-utility-packages/stargazers)&nbsp;&nbsp;&nbsp;
+<!-- [![Stargazers](https://img.shields.io/github/stars/pprmsk/papermasks-unity-utility-packages.svg?style=for-the-badge&color=yellow)](https://github.com/pprmsk/papermasks-unity-utility-packages/stargazers)&nbsp;&nbsp;&nbsp; -->
 [![Unity](https://img.shields.io/badge/Unity-2019.1.0b5+-black?style=for-the-badge&logo=unity)](https://unity.com/)&nbsp;&nbsp;&nbsp;
 [![License: MIT](https://img.shields.io/badge/License-MIT-4B0082?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
