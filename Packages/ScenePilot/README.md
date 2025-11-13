@@ -1,6 +1,6 @@
 <div align="center">
 
-# PAPERMASK's AUTO SCENE SWITCHER
+# PAPERMASK's SCENE PILOT
 
 <img width="200" alt="pprmsk-ezgif com-resize" src="https://github.com/user-attachments/assets/031b58d3-b3c0-4315-821d-6a359f68a592" />
 

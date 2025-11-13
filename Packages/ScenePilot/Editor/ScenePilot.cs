@@ -18,7 +18,7 @@ using System.IO;
 
 namespace Papermask.EditorTools.ScenePilot
 {
-    public class SceneSwitchWindow : EditorWindow
+    public class ScenePilot : EditorWindow
     {
         private Dictionary<string, List<string>> scenesByFolder;
         private string[] folderNames;
@@ -30,7 +30,7 @@ namespace Papermask.EditorTools.ScenePilot
         [MenuItem("Window/PAPERMASK Utility/Scene Pilot")]
         public static void ShowWindow()
         {
-            GetWindow<SceneSwitchWindow>("Scene Pilot");
+            GetWindow<ScenePilot>("Scene Pilot");
         }
 
         private void OnEnable()
