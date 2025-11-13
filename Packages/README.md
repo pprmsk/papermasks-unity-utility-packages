@@ -15,7 +15,7 @@ To use them in your project, simply copy the Git links below and add them via:
 
 </div>
 
-## **Auto Scene Switcher Git Link**
+## **Scene Pilot Git Link**
 A custom window to switch scenes more easily. Uses path Assets/Scenes to automatically generate buttons and tabs for all scenes in your project.
 
 GIT LINK: **`https://github.com/pprmsk/papermasks-unity-utilities.git?path=AutoSceneSwitcher`**
