@@ -1,7 +1,10 @@
-public enum ValidateType
+namespace PAPERMASK.Utilities
 {
-    NotNull,
-    NonEmpty,
-    Positive,
-    Negative
+    public enum ValidateType
+    {
+        NotNull,
+        NonEmpty,
+        IsPositive,
+        IsNegative
+    }
 }

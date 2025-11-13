@@ -4,14 +4,14 @@ using System;
 [AttributeUsage(AttributeTargets.Method)]
 public class ButtonAttribute : PropertyAttribute
 {
-    public string Label;
-    public string Group;
-    public string Foldout;
+    public string label;
+    public string group;
+    public string foldout;
 
     public ButtonAttribute(string methodName = null, string group = null, string foldout = null)
     {
-        Label = methodName;
-        Group = group;
-        Foldout = foldout;
+        label = methodName;
+        this.group = group;
+        this.foldout = foldout;
     }
 }

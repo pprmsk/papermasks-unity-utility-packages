@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public class RichHeaderAttribute : PropertyAttribute
+namespace PAPERMASK.Utilities
 {
-    public string text;
-    public RichHeaderAttribute(string text) => this.text = text;
+    public class RichHeaderAttribute : PropertyAttribute
+    {
+        public string text;
+        public RichHeaderAttribute(string text) => this.text = text;
+    }
 }

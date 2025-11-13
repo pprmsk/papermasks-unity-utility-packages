@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public class ValidateAttribute : PropertyAttribute
+namespace PAPERMASK.Utilities
 {
-    public readonly ValidateType validationType;
-    public ValidateAttribute(ValidateType type)
+    public class ValidateAttribute : PropertyAttribute
     {
-        validationType = type;
+        public readonly ValidateType validationType;
+        public ValidateAttribute(ValidateType type)
+        {
+            validationType = type;
+        }
     }
 }

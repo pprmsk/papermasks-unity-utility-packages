@@ -1,13 +1,16 @@
 using UnityEngine;
 
-public class HideIfAttribute : PropertyAttribute
+namespace PAPERMASK.Utilities
 {
-    public readonly string condition;
-    public readonly bool hideIfTrue;
-
-    public HideIfAttribute(string condition, bool hideIfTrue = true)
+    public class HideIfAttribute : PropertyAttribute
     {
-        this.condition = condition;
-        this.hideIfTrue = hideIfTrue;
+        public readonly string condition;
+        public readonly bool hideIfTrue;
+
+        public HideIfAttribute(string condition, bool hideIfTrue = true)
+        {
+            this.condition = condition;
+            this.hideIfTrue = hideIfTrue;
+        }
     }
 }

@@ -2,101 +2,112 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CustomPropertyDrawer(typeof(ValidateAttribute))]
-public class ValidateDrawer : PropertyDrawer
+namespace PAPERMASK.Utilities
 {
-    private static readonly Texture2D warningIcon = EditorGUIUtility.IconContent("console.erroricon.sml").image as Texture2D;
-    private static readonly HashSet<string> logged = new();
-
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(ValidateAttribute))]
+    public class ValidateDrawer : PropertyDrawer
     {
-        var validateAttr = (ValidateAttribute)attribute;
-        string error = Validate(property, validateAttr.validationType);
+        private static readonly Texture2D warningIcon = EditorGUIUtility.IconContent("console.erroricon.sml").image as Texture2D;
+        private static readonly HashSet<string> logged = new();
 
-        Rect fieldRect = position;
-        fieldRect.height = EditorGUIUtility.singleLineHeight;
+        private const int PADDING = 2;
+        private const int ICON_SIZE = 16;
+        private const int ERROR_FONT_SIZE = 10;
+        private const int FIELD_OFFSET = 18;
 
-        if (!string.IsNullOrEmpty(error))
+        private static readonly string logColorYellow = CLib.Yellow;
+        private static readonly string logColorRed = CLib.Red;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            Rect iconRect = new Rect(fieldRect.x, fieldRect.y, 16, fieldRect.height);
-            GUI.Label(iconRect, new GUIContent(warningIcon));
-            fieldRect.x += 18;
-            fieldRect.width -= 18;
+            var validateAttr = (ValidateAttribute)attribute;
+            string error = Validate(property, validateAttr.validationType);
 
-            if (Application.isPlaying)
+            Rect fieldRect = position;
+            fieldRect.height = EditorGUIUtility.singleLineHeight;
+
+            if (!string.IsNullOrEmpty(error))
             {
-                Object targetObject = property.serializedObject.targetObject;
+                Rect iconRect = new(fieldRect.x, fieldRect.y, ICON_SIZE, fieldRect.height);
+                GUI.Label(iconRect, new GUIContent(warningIcon));
+                fieldRect.x += FIELD_OFFSET;
+                fieldRect.width -= FIELD_OFFSET;
 
-                string objectName = targetObject.name;
-                string typeName = targetObject.GetType().Name;
-
-                if (targetObject is MonoBehaviour mb)
+                if (Application.isPlaying)
                 {
-                    objectName = mb.gameObject.name;
-                    typeName = "GameObject";
-                }
+                    Object targetObject = property.serializedObject.targetObject;
 
-                string key = targetObject.GetInstanceID() + "_" + property.propertyPath;
-                if (!logged.Contains(key))
-                {
-                    logged.Add(key);
-                    Debug.LogError($"<color=yellow>[{objectName}, ({typeName}) -> {property.name}]</color> <b><color=red>{error}</color></b>");
+                    string objectName = targetObject.name;
+                    string typeName = targetObject.GetType().Name;
+
+                    if (targetObject is MonoBehaviour mb)
+                    {
+                        objectName = mb.gameObject.name;
+                        typeName = "GameObject";
+                    }
+
+                    string key = targetObject.GetInstanceID() + "_" + property.propertyPath;
+                    if (!logged.Contains(key))
+                    {
+                        logged.Add(key);
+                        Debug.LogError($"<color={logColorYellow}>[{objectName}, ({typeName}) -> {property.name}]</color> <b><color={logColorRed}>{error}</color></b>");
+                    }
                 }
+            }
+
+            EditorGUI.PropertyField(fieldRect, property, label);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                Rect errorRect = new(position.x + FIELD_OFFSET, position.y + EditorGUIUtility.singleLineHeight + PADDING,
+                                     position.width - FIELD_OFFSET, EditorGUIUtility.singleLineHeight);
+                GUIStyle errorStyle = new(EditorStyles.label);
+                errorStyle.normal.textColor = Color.red;
+                errorStyle.fontSize = ERROR_FONT_SIZE;
+                GUI.Label(errorRect, error, errorStyle);
             }
         }
 
-        EditorGUI.PropertyField(fieldRect, property, label);
-
-        if (!string.IsNullOrEmpty(error))
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            Rect errorRect = new(position.x + 18, position.y + EditorGUIUtility.singleLineHeight + 2,
-                                      position.width - 18, EditorGUIUtility.singleLineHeight);
-            GUIStyle errorStyle = new(EditorStyles.label);
-            errorStyle.normal.textColor = Color.red;
-            errorStyle.fontSize = 10;
-            GUI.Label(errorRect, error, errorStyle);
-        }
-    }
+            var validateAttr = (ValidateAttribute)attribute;
+            string error = Validate(property, validateAttr.validationType);
 
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        var validateAttr = (ValidateAttribute)attribute;
-        string error = Validate(property, validateAttr.validationType);
+            float height = EditorGUIUtility.singleLineHeight;
+            if (!string.IsNullOrEmpty(error))
+                height += EditorGUIUtility.singleLineHeight + PADDING;
 
-        float height = EditorGUIUtility.singleLineHeight;
-        if (!string.IsNullOrEmpty(error))
-            height += EditorGUIUtility.singleLineHeight + 2;
-
-        return height;
-    }
-
-    private string Validate(SerializedProperty property, ValidateType rule)
-    {
-        switch (rule)
-        {
-            case ValidateType.NotNull:
-                if (property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue == null)
-                    return "Field cannot be null";
-                break;
-
-            case ValidateType.NonEmpty:
-                if (property.propertyType == SerializedPropertyType.String && string.IsNullOrWhiteSpace(property.stringValue))
-                    return "String cannot be empty";
-                break;
-
-            case ValidateType.Positive:
-                if ((property.propertyType == SerializedPropertyType.Integer && property.intValue <= 0) ||
-                    (property.propertyType == SerializedPropertyType.Float && property.floatValue <= 0f))
-                    return "Value must be positive";
-                break;
-
-            case ValidateType.Negative:
-                if ((property.propertyType == SerializedPropertyType.Integer && property.intValue < 0) ||
-                    (property.propertyType == SerializedPropertyType.Float && property.floatValue < 0f))
-                    return "Value must be negative";
-                break;
+            return height;
         }
 
-        return null;
+        private string Validate(SerializedProperty property, ValidateType rule)
+        {
+            switch (rule)
+            {
+                case ValidateType.NotNull:
+                    if (property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue == null)
+                        return "Field cannot be null";
+                    break;
+
+                case ValidateType.NonEmpty:
+                    if (property.propertyType == SerializedPropertyType.String && string.IsNullOrWhiteSpace(property.stringValue))
+                        return "String cannot be empty";
+                    break;
+
+                case ValidateType.IsPositive:
+                    if ((property.propertyType == SerializedPropertyType.Integer && property.intValue <= 0) ||
+                        (property.propertyType == SerializedPropertyType.Float && property.floatValue <= 0f))
+                        return "Value must be positive";
+                    break;
+
+                case ValidateType.IsNegative:
+                    if ((property.propertyType == SerializedPropertyType.Integer && property.intValue < 0) ||
+                        (property.propertyType == SerializedPropertyType.Float && property.floatValue < 0f))
+                        return "Value must be negative";
+                    break;
+            }
+
+            return null;
+        }
     }
 }

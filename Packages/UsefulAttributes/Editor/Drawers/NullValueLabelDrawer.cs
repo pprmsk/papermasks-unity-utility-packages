@@ -1,46 +1,49 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(NullValueLabelAttribute))]
-public class NullValueLabelDrawer : PropertyDrawer
+namespace PAPERMASK.Utilities
 {
-    string nullColor = CLib.DarkGray;
-
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(NullValueLabelAttribute))]
+    public class NullValueLabelDrawer : PropertyDrawer
     {
-        var attr = (NullValueLabelAttribute)attribute;
+        private readonly string nullColor = CLib.DarkGray;
+        private const int PADDING = 2;
+        private const int WIDTH_OFFSET = 20;
 
-        if (property.propertyType != SerializedPropertyType.ObjectReference)
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.PropertyField(position, property, label, true);
-            return;
-        }
+            var attr = (NullValueLabelAttribute)attribute;
 
-        EditorGUI.BeginProperty(position, label, property);
-
-        Object assigned = property.objectReferenceValue;
-        var fieldType = fieldInfo.FieldType;
-
-        if (assigned == null)
-        {
-            GUIContent fieldLabel = new GUIContent($"<color={nullColor}>NULL = {attr.label}</color>");
-            GUIStyle style = new GUIStyle(EditorStyles.objectField)
+            if (property.propertyType != SerializedPropertyType.ObjectReference)
             {
-                richText = true
-            };
+                EditorGUI.PropertyField(position, property, label, true);
+                return;
+            }
 
-            property.objectReferenceValue = EditorGUI.ObjectField(position, label, null, fieldType, true);
+            EditorGUI.BeginProperty(position, label, property);
 
-            Rect textRect = position;
-            textRect.x += EditorGUIUtility.labelWidth + 2;
-            textRect.width -= EditorGUIUtility.labelWidth + 20;
-            GUI.Label(textRect, fieldLabel, style);
+            Object assigned = property.objectReferenceValue;
+            var fieldType = fieldInfo.FieldType;
+
+            if (assigned == null)
+            {
+                GUIContent fieldLabel = new GUIContent($"<color={nullColor}>NULL = {attr.label}</color>");
+                GUIStyle style = new GUIStyle(EditorStyles.objectField);
+                style.richText = true;
+
+                property.objectReferenceValue = EditorGUI.ObjectField(position, label, null, fieldType, true);
+
+                Rect textRect = position;
+                textRect.x += EditorGUIUtility.labelWidth + PADDING;
+                textRect.width -= EditorGUIUtility.labelWidth + WIDTH_OFFSET;
+                GUI.Label(textRect, fieldLabel, style);
+            }
+            else
+            {
+                EditorGUI.PropertyField(position, property, label, true);
+            }
+
+            EditorGUI.EndProperty();
         }
-        else
-        {
-            EditorGUI.PropertyField(position, property, label, true);
-        }
-
-        EditorGUI.EndProperty();
     }
 }

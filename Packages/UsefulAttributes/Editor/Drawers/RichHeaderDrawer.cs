@@ -1,19 +1,24 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(RichHeaderAttribute))]
-public class RichHeaderDrawer : DecoratorDrawer
+namespace PAPERMASK.Utilities
 {
-    public override void OnGUI(Rect position)
+    [CustomPropertyDrawer(typeof(RichHeaderAttribute))]
+    public class RichHeaderDrawer : DecoratorDrawer
     {
-        RichHeaderAttribute header = (RichHeaderAttribute)attribute;
-        GUIStyle style = new(EditorStyles.boldLabel);
-        style.richText = true;
-        EditorGUI.LabelField(position, header.text, style);
-    }
+        private const int PADDING = 2;
 
-    public override float GetHeight()
-    {
-        return EditorGUIUtility.singleLineHeight + 2;
+        public override void OnGUI(Rect position)
+        {
+            RichHeaderAttribute header = (RichHeaderAttribute)attribute;
+            GUIStyle style = new(EditorStyles.boldLabel);
+            style.richText = true;
+            EditorGUI.LabelField(position, header.text, style);
+        }
+
+        public override float GetHeight()
+        {
+            return EditorGUIUtility.singleLineHeight + PADDING;
+        }
     }
 }

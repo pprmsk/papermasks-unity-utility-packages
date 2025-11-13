@@ -16,16 +16,17 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Papermask.EditorTools.ScenePilot
+namespace PAPERMASK.Utilities
 {
     public class ScenePilot : EditorWindow
     {
+        private const string VERSION = "1.0.1";
+
         private Dictionary<string, List<string>> scenesByFolder;
         private string[] folderNames;
         private string activeFolder;
 
         private const float REFRESH_OFFSET = 4f;
-        private const string VERSION = "1.0.1";
 
         [MenuItem("Window/PAPERMASK Utility/Scene Pilot")]
         public static void ShowWindow()

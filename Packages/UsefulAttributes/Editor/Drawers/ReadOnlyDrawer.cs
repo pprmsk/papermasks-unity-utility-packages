@@ -1,24 +1,27 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
-internal class ReadOnlyDrawer : PropertyDrawer
+namespace PAPERMASK.Utilities
 {
-    Color readOnlyColor = ColorUtility.TryParseHtmlString(CLib.LightPink, out var color) ? color : Color.magenta;
-
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
+    internal class ReadOnlyDrawer : PropertyDrawer
     {
-        Color originalColor = GUI.color;
-        Color originalLabelColor = GUI.contentColor;
+        Color readOnlyColor = ColorUtility.TryParseHtmlString(CLib.LightPink, out var color) ? color : Color.magenta;
 
-        GUI.backgroundColor = readOnlyColor;
-        GUI.contentColor = readOnlyColor;
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            Color originalColor = GUI.color;
+            Color originalLabelColor = GUI.contentColor;
 
-        GUI.enabled = false;
-        EditorGUI.PropertyField(position, property, label, true);
-        GUI.enabled = true;
+            GUI.backgroundColor = readOnlyColor;
+            GUI.contentColor = readOnlyColor;
 
-        GUI.backgroundColor = originalColor;
-        GUI.contentColor = originalLabelColor;
+            GUI.enabled = false;
+            EditorGUI.PropertyField(position, property, label, true);
+            GUI.enabled = true;
+
+            GUI.backgroundColor = originalColor;
+            GUI.contentColor = originalLabelColor;
+        }
     }
 }
