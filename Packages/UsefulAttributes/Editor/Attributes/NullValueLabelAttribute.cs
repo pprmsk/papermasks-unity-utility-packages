@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class NullValueLabelAttribute : PropertyAttribute
+namespace PAPERMASK.Utilities
 {
-    public readonly string label;
-
-    public NullValueLabelAttribute(string label = "Default")
+    public class NullValueLabelAttribute : PropertyAttribute
     {
-        this.label = label;
+        public readonly string label;
+
+        public NullValueLabelAttribute(string label = "Default")
+        {
+            this.label = label;
+        }
     }
 }

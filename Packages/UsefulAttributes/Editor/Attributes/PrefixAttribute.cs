@@ -1,12 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PrefixAttribute : PropertyAttribute
+namespace PAPERMASK.Utilities
 {
-    public readonly string prefix;
-    public readonly Color color;
+    public class PrefixAttribute : PropertyAttribute
+    {
+        public readonly string prefix;
+        public readonly Color color;
 
-    private static readonly Dictionary<string, Color> PrefixColorOverrides = new()
+        private static readonly Dictionary<string, Color> PrefixColorOverrides = new()
     {
         { "SObj", Color.royalBlue},
         { "Comp", Color.paleGreen},
@@ -16,28 +18,29 @@ public class PrefixAttribute : PropertyAttribute
         { "Temp", Color.darkRed},
     };
 
-    public PrefixAttribute(string prefix, string hexColor = null)
-    {
-        this.prefix = prefix;
-
-        if (PrefixColorOverrides.TryGetValue(prefix, out Color overrideColor))
+        public PrefixAttribute(string prefix, string hexColor = null)
         {
-            if (hexColor != null)
+            this.prefix = prefix;
+
+            if (PrefixColorOverrides.TryGetValue(prefix, out Color overrideColor))
             {
-                Debug.LogWarning($"Prefix '{prefix}' has a color override. The provided color '{hexColor}' will be ignored.");
+                if (hexColor != null)
+                {
+                    Debug.LogWarning($"Prefix '{prefix}' has a color override. The provided color '{hexColor}' will be ignored.");
+                }
+
+                color = overrideColor;
+                return;
             }
 
-            color = overrideColor;
-            return;
-        }
-
-        if (ColorUtility.TryParseHtmlString(hexColor, out Color col))
-        {
-            color = col;
-        }
-        else
-        {
-            color = Color.white;
+            if (ColorUtility.TryParseHtmlString(hexColor, out Color col))
+            {
+                color = col;
+            }
+            else
+            {
+                color = Color.white;
+            }
         }
     }
 }

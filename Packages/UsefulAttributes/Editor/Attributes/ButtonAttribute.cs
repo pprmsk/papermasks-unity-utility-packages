@@ -1,17 +1,20 @@
 using UnityEngine;
 using System;
 
-[AttributeUsage(AttributeTargets.Method)]
-public class ButtonAttribute : PropertyAttribute
+namespace PAPERMASK.Utilities
 {
-    public string label;
-    public string group;
-    public string foldout;
-
-    public ButtonAttribute(string methodName = null, string group = null, string foldout = null)
+    [AttributeUsage(AttributeTargets.Method)]
+    public class ButtonAttribute : PropertyAttribute
     {
-        label = methodName;
-        this.group = group;
-        this.foldout = foldout;
+        public string label;
+        public string group;
+        public string foldout;
+
+        public ButtonAttribute(string methodName = null, string group = null, string foldout = null)
+        {
+            label = methodName;
+            this.group = group;
+            this.foldout = foldout;
+        }
     }
 }

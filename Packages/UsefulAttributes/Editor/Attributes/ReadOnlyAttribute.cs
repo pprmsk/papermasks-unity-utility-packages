@@ -1,3 +1,6 @@
 using UnityEngine;
 
-public class ReadOnlyAttribute : PropertyAttribute { }
+namespace PAPERMASK.Utilities
+{
+    public class ReadOnlyAttribute : PropertyAttribute { }
+}
