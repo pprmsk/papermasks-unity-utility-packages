@@ -30,19 +30,26 @@ namespace PAPERMASK.Utilities
             var hideIf = (HideIfAttribute)attribute;
             object target = GetTargetObject(property);
 
-            if (target == null)
-                return false;
+            if (target == null) { return false; }
 
             var type = target.GetType();
             var field = type.GetField(hideIf.condition, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            var prop = type.GetProperty(hideIf.condition, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             bool conditionValue = false;
 
-            if (field != null && field.FieldType == typeof(bool))
-                conditionValue = (bool)field.GetValue(target);
-            else if (prop != null && prop.PropertyType == typeof(bool))
-                conditionValue = (bool)prop.GetValue(target);
+            if (field != null)
+            {
+                object valueObj = field.GetValue(target);
+
+                if (hideIf.hasCompareValue)
+                {
+                    conditionValue = valueObj.Equals(hideIf.compareValue);
+                }
+                else if (field.FieldType == typeof(bool))
+                {
+                    conditionValue = (bool)valueObj;
+                }
+            }
             else
             {
                 Debug.LogWarning($"[HideIf] No bool field or property named '{hideIf.condition}' found on {target}");
@@ -72,11 +79,12 @@ namespace PAPERMASK.Utilities
                     int index = int.Parse(part.Substring(bracket + 1, part.Length - bracket - 2));
 
                     var listField = obj.GetType().GetField(listName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if (listField == null) return null;
+                    if (listField == null) { return null; }
 
                     if (listField.GetValue(obj) is IList list)
                     {
-                        if (index < 0 || index >= list.Count) return null;
+                        if (index < 0 || index >= list.Count) { return null; }
+
                         return list[index];
                     }
 
@@ -96,11 +104,11 @@ namespace PAPERMASK.Utilities
                     int index = int.Parse(part.Substring(bracket + 1, part.Length - bracket - 2));
 
                     var listField = obj.GetType().GetField(listName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if (listField == null) return null;
+                    if (listField == null) { return null; }
 
                     if (listField.GetValue(obj) is IList list)
                     {
-                        if (index < 0 || index >= list.Count) return null;
+                        if (index < 0 || index >= list.Count) { return null; }
                         obj = list[index];
                     }
                     else
@@ -111,11 +119,11 @@ namespace PAPERMASK.Utilities
                 else
                 {
                     var f = obj.GetType().GetField(part, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if (f == null) return null;
+                    if (f == null) { return null; }
                     obj = f.GetValue(obj);
                 }
 
-                if (obj == null) return null;
+                if (obj == null) { return null; }
             }
 
             return obj;
