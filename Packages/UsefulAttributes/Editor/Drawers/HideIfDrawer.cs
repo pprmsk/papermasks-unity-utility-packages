@@ -1,8 +1,8 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using System.Reflection;
 using System.Collections;
+using System.Reflection;
 
 namespace PAPERMASK.Utilities
 {
@@ -11,16 +11,14 @@ namespace PAPERMASK.Utilities
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (ShouldHide(property))
-                return 0f;
+            if (ShouldHide(property)) { return -2f; }
 
             return EditorGUI.GetPropertyHeight(property, label, true);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (ShouldHide(property))
-                return;
+            if (ShouldHide(property)) { return; }
 
             EditorGUI.PropertyField(position, property, label, true);
         }
@@ -35,24 +33,32 @@ namespace PAPERMASK.Utilities
             var type = target.GetType();
             var field = type.GetField(hideIf.condition, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
+            if (field == null) { return false; }
+
+            object valueObj = field.GetValue(target);
             bool conditionValue = false;
 
-            if (field != null)
+            if (field.FieldType == typeof(bool))
             {
-                object valueObj = field.GetValue(target);
-
-                if (hideIf.hasCompareValue)
-                {
-                    conditionValue = valueObj.Equals(hideIf.compareValue);
-                }
-                else if (field.FieldType == typeof(bool))
-                {
-                    conditionValue = (bool)valueObj;
-                }
+                conditionValue = (bool)valueObj;
             }
-            else
+            else if (hideIf.hasCompareValue)
             {
-                Debug.LogWarning($"[HideIf] No bool field or property named '{hideIf.condition}' found on {target}");
+                if (valueObj is IList list)
+                {
+                    if (hideIf.compareValue is int intVal)
+                    {
+                        conditionValue = list.Count == intVal;
+                    }
+                    else
+                    {
+                        conditionValue = list.Count > 0;
+                    }
+                }
+                else
+                {
+                    conditionValue = valueObj != null && valueObj.Equals(hideIf.compareValue);
+                }
             }
 
             return conditionValue == hideIf.hideIfTrue;
@@ -66,13 +72,13 @@ namespace PAPERMASK.Utilities
             object obj = property.serializedObject.targetObject;
 
             string normalizedPath = property.propertyPath.Replace(".Array.data[", "[");
-
             string[] parts = normalizedPath.Split('.');
 
             if (parts.Length == 1 && parts[0].Contains("["))
             {
                 string part = parts[0];
                 int bracket = part.IndexOf('[');
+
                 if (bracket >= 0)
                 {
                     string listName = part.Substring(0, bracket);
@@ -93,6 +99,7 @@ namespace PAPERMASK.Utilities
             }
 
             int stopIndex = parts.Length - 1;
+
             for (int i = 0; i < stopIndex; i++)
             {
                 string part = parts[i];
@@ -109,6 +116,7 @@ namespace PAPERMASK.Utilities
                     if (listField.GetValue(obj) is IList list)
                     {
                         if (index < 0 || index >= list.Count) { return null; }
+
                         obj = list[index];
                     }
                     else
@@ -120,6 +128,7 @@ namespace PAPERMASK.Utilities
                 {
                     var f = obj.GetType().GetField(part, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     if (f == null) { return null; }
+
                     obj = f.GetValue(obj);
                 }
 
@@ -128,7 +137,6 @@ namespace PAPERMASK.Utilities
 
             return obj;
         }
-
     }
 }
 #endif
