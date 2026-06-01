@@ -1,0 +1,18 @@
+{
+    "name": "PAPERMASK.Utilities.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:342efbe1c99a4d04ea72c8c457e5be38"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
