@@ -46,7 +46,7 @@ namespace PAPERMASK.Utilities
                         typeName = "GameObject";
                     }
 
-                    string key = targetObject.GetInstanceID() + "_" + property.propertyPath;
+                    string key = targetObject.GetEntityId() + "_" + property.propertyPath;
                     if (!logged.Contains(key))
                     {
                         logged.Add(key);
